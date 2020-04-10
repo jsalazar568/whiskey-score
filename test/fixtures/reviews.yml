@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  whiskey: 
+  user: one
+  title: MyString
+  description: MyText
+  taste_grade: 1
+  color_grade: 1
+  smokiness_grade: 1
+
+two:
+  whiskey: 
+  user: two
+  title: MyString
+  description: MyText
+  taste_grade: 1
+  color_grade: 1
+  smokiness_grade: 1
