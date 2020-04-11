@@ -13,3 +13,30 @@
  *= require_tree .
  *= require_self
  */
+.header {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+}
+.ant-layout-content.site-layout {
+  padding: 0 50px;
+  margin-top: 64px;
+}
+.site-layout .site-layout-background {
+  background: #fff;
+  padding: 24px;
+  min-height: 380px;
+}
+[data-theme="dark"] .site-layout .site-layout-background {
+  background: #141414;
+}
+.container {
+  padding: 24px;
+}
+.logo {
+  height: 31px;
+  color: white;
+  float: left;
+  font-weight: bold;
+  font-size: large;
+}

@@ -9,6 +9,12 @@ class User < ApplicationRecord
 
   before_validation :normalize
 
+  def self.create_or_update_by!(args = nil, attributes = nil)
+    user = find_or_initialize_by({ email: args[:email].upcase }) if args
+    user.update!(attributes) if attributes && user
+    user
+  end
+
   private
 
   def normalize
