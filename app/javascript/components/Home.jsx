@@ -9,65 +9,66 @@ const { Header, Content, Footer } = Layout;
 
 const Home = () => {
   const [form] = Form.useForm();
-  const [redirect, setRedirect] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [userName, setUserName] = useState(null);
 
   const onFinish = values => {
-    console.log('Received values of form: ', values);
     client("/api/v1/users", { data: values })
-      .then(response => setRedirect(true))
+      .then(response => {
+        setUserId(response.id);
+        setUserName(response.name || response.email);
+      })
       .catch(error => console.log(error.message));
   };
 
-  if(redirect) {
-    return (<Redirect to={{ pathname: "/reviews" }}/>)
+  if(userId && userName) {
+    return (<Redirect to={{ pathname: "/reviews", state: { id: userId, name: userName } }}/>)
   }
 
   return (
-    <div>
-      <Layout>
-        <Header>
-          <div className="logo">Grade your Whiskeys</div>
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}/>
-        </Header>
-        <Content className="site-layout">
-          <div className="site-layout-background">
-            <Form
-              layout='vertical'
-              form={form}
-              onFinish={onFinish}
-              className="email-form"
+    <Layout>
+      <Header>
+        <div className="logo">Grade your Whiskeys</div>
+        <Menu theme="dark" mode="horizontal"/>
+      </Header>
+      <Content className="site-layout">
+        <div className="site-layout-background">
+          <Form
+            layout='vertical'
+            form={form}
+            onFinish={onFinish}
+            className="email-form"
+          >
+            <Form.Item
+              name="email"
+              label="Enter your email to start:"
+              rules={[
+                {
+                  type: 'email',
+                  message: 'The input is not valid E-mail!',
+                },
+                {
+                  required: true,
+                  message: 'Please input your E-mail!',
+                },
+              ]}
             >
-              <Form.Item
-                name="email"
-                label="Enter your email to start:"
-                rules={[
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                  {
-                    required: true,
-                    message: 'Please input your E-mail!',
-                  },
-                ]}
-              >
-                <Input placeholder="Email" />
-              </Form.Item>
-              <Form.Item
-                name="name"
-                label="How you want us to call you?"
-              >
-                <Input placeholder="Name" />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit" className="email-button">View Whiskeys</Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>Powered by 🥃</Footer>
-      </Layout>,
-    </div>
+              <Input placeholder="Email" />
+            </Form.Item>
+            <Form.Item
+              name="name"
+              label="How you want us to call you?"
+            >
+              <Input placeholder="Name" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="email-button">View Whiskeys</Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>Powered by 🥃</Footer>
+    </Layout>
   )
 }
 export default Home;

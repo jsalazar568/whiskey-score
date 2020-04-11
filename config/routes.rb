@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :whiskeys, only: [:index, :show, :create]
+      resources :whiskey_brands, only: [:index]
       resources :users, only: [:create]
       resources :reviews, only: [:index, :create]
     end
