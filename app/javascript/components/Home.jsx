@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import '../../assets/stylesheets/homepage.scss'
+
 import { client } from '../utils/ApiClient';
 import { Layout, Menu, Button, Input, Form } from 'antd';
 
@@ -7,13 +9,18 @@ const { Header, Content, Footer } = Layout;
 
 const Home = () => {
   const [form] = Form.useForm();
+  const [redirect, setRedirect] = useState(false);
 
   const onFinish = values => {
     console.log('Received values of form: ', values);
     client("/api/v1/users", { data: values })
-      .then(response => this.props.history.push(`/reviews`))
+      .then(response => setRedirect(true))
       .catch(error => console.log(error.message));
   };
+
+  if(redirect) {
+    return (<Redirect to={{ pathname: "/reviews" }}/>)
+  }
 
   return (
     <div>
