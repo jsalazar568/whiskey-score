@@ -10,4 +10,5 @@ class Review < ApplicationRecord
                 allow_nil: true
             }
   validates :user, :whiskey, { presence: true }
+  validates :user, { uniqueness: { scope: :whiskey, message: "already made a review to the whiskey" } }
 end

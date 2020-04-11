@@ -1,13 +1,13 @@
 class WhiskeyBrand < ApplicationRecord
   has_many :whiskeys
 
-  validates :name, :label, { presence: true }
+  validates :name, { presence: true, uniqueness: { case_sensitive: false } }
 
   before_validation :normalize
 
   private
 
   def normalize
-    self.name = brand.upcase
+    self.name = name.upcase
   end
 end

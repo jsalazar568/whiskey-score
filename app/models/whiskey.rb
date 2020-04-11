@@ -2,7 +2,11 @@ class Whiskey < ApplicationRecord
   belongs_to :whiskey_brand
   has_many :reviews
 
-  validates :brand, :label, { presence: true }
+  validates :label,
+            {
+                presence: true,
+                uniqueness: { case_sensitive: false, scope: :whiskey_brand, message: "already exists to the brand" }
+            }
 
   before_validation :normalize
   before_save :check_association
