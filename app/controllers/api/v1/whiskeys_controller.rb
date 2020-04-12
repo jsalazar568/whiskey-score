@@ -6,16 +6,6 @@ class Api::V1::WhiskeysController < ApplicationController
     render json: whiskies
   end
 
-  def create
-    #OJO se usara?
-    whiskey = Whiskey.new(whiskey_params)
-    if whiskey
-      render json: whiskey
-    else
-      render json: whiskey.errors
-    end
-  end
-
   private
 
   def whiskey_params
