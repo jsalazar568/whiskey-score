@@ -1,10 +1,13 @@
 class Api::V1::WhiskeysController < ApplicationController
   def index
-    whiskies = Whiskey.includes(:whiskey_brand).order(:'whiskey_brand.name', :label).all
+    whiskies = Whiskey.filter_by_brand(params[:whiskey_brand_id])
+                      .order(:label)
+                      .all
     render json: whiskies
   end
 
   def create
+    #OJO se usara?
     whiskey = Whiskey.new(whiskey_params)
     if whiskey
       render json: whiskey
@@ -13,13 +16,9 @@ class Api::V1::WhiskeysController < ApplicationController
     end
   end
 
-  def show
-    whiskey = Whiskey.find_by
-  end
-
   private
 
   def whiskey_params
-    params.permit(:label, whiskey_brands_attributes: [:name, :id])
+    params.permit(:label, :whiskey_brand_id)
   end
 end

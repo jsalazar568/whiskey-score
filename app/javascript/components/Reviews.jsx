@@ -15,6 +15,7 @@ const {Content, Footer} = Layout;
 
 
 export default function Reviews(props) {
+  //OJO borrar:
   props.location.state = {id: 6, name: "JOHANNA@MAIL.COM"};
   if (props.location.state === undefined) {
     return (<Redirect to={{pathname: "/"}}/>);
@@ -52,9 +53,14 @@ export default function Reviews(props) {
               <hr className="my-4"/>
               <Button type="primary" style={{marginLeft: 8, float: 'right'}}>
                 <Link
-                  to="/reviews"
                   className="btn btn-lg custom-button"
                   role="button"
+                  to={{
+                    pathname: '/review',
+                    state: {
+                      id: id, name: name
+                    }
+                  }}
                 >
                   Add Review
                 </Link>

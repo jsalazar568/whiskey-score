@@ -13,9 +13,9 @@ export default function AppHeader({name}) {
       <Menu theme="dark" mode="horizontal" className="review-menu">
         <SubMenu
           title={
-            <span className="submenu-title-wrapper">
+            <span className="submenu-title-wrapper" style={{'textTransform': 'lowercase'}}>
               {name}
-              <UserOutlined/>
+              <UserOutlined style={{'marginLeft': '5px'}}/>
             </span>
           }
         >

@@ -12,7 +12,7 @@ export function ReviewsContextProvider({children, userId}) {
   const [filters, setFilters] = useState({});
 
   useEffect(() => {
-    const url = buildURLQueryString({user_id: userId, ...filters});
+    const url = buildURLQueryString('/api/v1/reviews', {user_id: userId, ...filters});
 
     client(url)
       .then(response => {

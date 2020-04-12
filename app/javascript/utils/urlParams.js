@@ -1,4 +1,4 @@
-export function buildURLQueryString(params) {
+export function buildURLQueryString(base, params) {
   const searchParams = Object.entries(params).map((pair) => {
       if(Array.isArray(pair[1])) {
         return pair[1].map((value) => `${pair[0]}${encodeURIComponent('[]')}=${value}`).join('&');
@@ -7,5 +7,5 @@ export function buildURLQueryString(params) {
       }
       return pair.join('=');
     }).join('&');
-  return `/api/v1/reviews?${searchParams}`;
+  return `${base}?${searchParams}`;
 }

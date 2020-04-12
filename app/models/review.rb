@@ -17,19 +17,33 @@ class Review < ApplicationRecord
   scope :filter_by_grades, ->(grade_hash) { where(grade_hash) }
   scope :filter_by_text, -> (text) { where("to_tsvector(title || ' ' || description) @@ to_tsquery('#{text.gsub(/[[:blank:]]/, '&')}')") }
 
+  def self.create_or_update_by!(args = nil, attributes = nil)
+    raise StandardError, 'Invalid parameters' if (args[:user_id].blank? || args[:whiskey_id].blank?)
+
+    review = Review.find_or_initialize_by({ user_id: args[:user_id], whiskey_id: args[:whiskey_id]})
+    review.update!(attributes) if attributes
+    review
+  end
 
   def self.filter_by(params)
     reviews = filter_by_grades(grade_params(params))
-    if(params[:text_search])
-      reviews = reviews.where('reviews.id IN (?) OR reviews.id IN (?)',
-                              Review.filter_by_text(params[:text_search]).ids,
-                              Review.joins(:whiskey).merge(Whiskey.filter_by_label(params[:text_search])).ids)
+    if params[:text_search]
+      reviews = reviews.filter_by_general_text(params[:text_search])
     end
-    if(params[:whiskey_brand_ids])
-      reviews = reviews.joins(:whiskey)
-                       .merge(Whiskey.filter_by_brand(params[:whiskey_brand_ids]))
+    if (params[:whiskey_brand_ids])
+      reviews = reviews.filter_by_brands(params[:whiskey_brand_ids])
     end
     reviews
+  end
+
+  def self.filter_by_general_text(text)
+    where('reviews.id IN (?) OR reviews.id IN (?)',
+          Review.filter_by_text(text).ids,
+          Review.joins(:whiskey).merge(Whiskey.filter_by_label(text)).ids)
+  end
+
+  def self.filter_by_brands(brand_ids)
+    joins(:whiskey).merge(Whiskey.filter_by_brand(brand_ids))
   end
 
   private
