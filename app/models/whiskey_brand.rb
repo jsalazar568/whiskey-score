@@ -8,6 +8,6 @@ class WhiskeyBrand < ApplicationRecord
   private
 
   def normalize
-    self.name = name.upcase
+    self.name = name.upcase if name
   end
 end
