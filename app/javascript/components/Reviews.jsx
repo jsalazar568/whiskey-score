@@ -26,7 +26,6 @@ export default function Reviews(props) {
   useEffect(() => {
     client(`/api/v1/reviews?user_id=${id}`)
       .then(response => {
-        console.log(response);
         setReviews(response);
       })
       .catch(error => console.log(error.message));

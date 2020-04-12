@@ -1,33 +1,47 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {client} from "../utils/ApiClient";
+import {buildURLQueryString} from "../utils/urlParams";
 
 export const ReviewsContext = React.createContext({
   reviews: [],
-  search() {
-  }
+  filters: {}
 });
-
-//AÑADIR AQUI LOS FILTROS
 
 export function ReviewsContextProvider({children, userId}) {
   const [reviews, setReviews] = useState([]);
+  const [filters, setFilters] = useState({});
 
-  const search = useCallback((value = {}) => {
-    const searchParams = Object.entries({user_id: userId, ...value}).map((pair) => pair.join('=')).join('&');
-    const url = `/api/v1/reviews?${searchParams}`;
+  useEffect(() => {
+    const url = buildURLQueryString({user_id: userId, ...filters});
 
     client(url)
       .then(response => {
-        console.log(response);
         setReviews(response);
       })
       .catch(error => console.log(error.message));
 
-  },[userId]);
+  },[userId, filters]);
 
-  useEffect(() => {
-    search()
-  }, [userId]);
+  const filterBrand = useCallback((brands = []) => {
+    setFilters({...filters, brands_ids: brands});
+  }, [filters]);
 
-  return <ReviewsContext.Provider value={{search, reviews}}>{children}</ReviewsContext.Provider>
+  const filterTaste = useCallback((taste_grade = null) => {
+    setFilters({...filters, taste_grade});
+  }, [filters]);
+
+  const filterColor = useCallback((color_grade = null) => {
+    setFilters({...filters, color_grade});
+  }, [filters]);
+
+  const filterSmokiness = useCallback((smokiness_grade = null) => {
+    setFilters({...filters, smokiness_grade});
+  }, [filters]);
+
+  const filterText = useCallback((text_search = null) => {
+    setFilters({...filters, text_search});
+  }, [filters]);
+
+
+  return <ReviewsContext.Provider value={{reviews, filterBrand, filterTaste, filterColor, filterSmokiness, filterText}}>{children}</ReviewsContext.Provider>
 }
