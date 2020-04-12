@@ -1,6 +1,8 @@
+require 'faker'
 
 FactoryBot.define do
-  factory :whiskey do
-    label { "John" }
+  factory :whiskey, class: Whiskey do
+    label { Faker::DcComics.heroine }
+    whiskey_brand
   end
 end
