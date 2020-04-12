@@ -4,23 +4,33 @@ import {buildURLQueryString} from "../utils/urlParams";
 
 export const ReviewsContext = React.createContext({
   reviews: [],
-  filters: {}
+  filters: {},
+  pagination: {}
 });
+
+const pageSize = 15;
 
 export function ReviewsContextProvider({children, userId}) {
   const [reviews, setReviews] = useState([]);
   const [filters, setFilters] = useState({});
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const url = buildURLQueryString('/api/v1/reviews', {user_id: userId, ...filters});
+    const url = buildURLQueryString('/api/v1/reviews', {user_id: userId, page: page, per_page: pageSize, ...filters});
 
     client(url)
-      .then(response => {
-        setReviews(response);
+      .then(({reviews, total}) => {
+        setTotal(total);
+        setReviews(reviews);
       })
       .catch(error => console.log(error.message));
 
-  },[userId, filters]);
+  }, [userId, filters, page]);
+
+  const onChangePagination = useCallback((page) => {
+    setPage(page);
+  }, []);
 
   const filterBrand = useCallback((brands = []) => {
     setFilters({...filters, whiskey_brand_ids: brands});
@@ -43,5 +53,18 @@ export function ReviewsContextProvider({children, userId}) {
   }, [filters]);
 
 
-  return <ReviewsContext.Provider value={{reviews, filterBrand, filterTaste, filterColor, filterSmokiness, filterText}}>{children}</ReviewsContext.Provider>
+  return <ReviewsContext.Provider value={{
+    reviews,
+    filterBrand,
+    filterTaste,
+    filterColor,
+    filterSmokiness,
+    filterText,
+    onChangePagination,
+    pagination: {
+      pageSize,
+      page,
+      total
+    }
+  }}>{children}</ReviewsContext.Provider>
 }

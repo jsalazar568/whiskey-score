@@ -1,12 +1,13 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Rate, Table} from 'antd';
 import {ReviewsContext} from "./ReviewsContext";
 
 const { Column } = Table;
 
-
 export default function ReviewsTable () {
-  const {reviews} = useContext(ReviewsContext);
+  const {reviews, onChangePagination, pagination} = useContext(ReviewsContext);
+
+  const {page: current, pageSize, total} = pagination;
 
   const columns = [
     {
@@ -41,6 +42,6 @@ export default function ReviewsTable () {
   ];
 
   return (
-    <Table dataSource={reviews} columns={columns} rowKey="id" />
+    <Table dataSource={reviews} columns={columns} rowKey="id" pagination={{current, pageSize, total, onChange: onChangePagination}}/>
   )
 }

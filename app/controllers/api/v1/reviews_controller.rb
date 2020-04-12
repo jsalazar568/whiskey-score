@@ -2,7 +2,10 @@ class Api::V1::ReviewsController < ApplicationController
   def index
     user = User.find(review_params[:user_id])
     reviews = user.reviews.filter_by(review_params)
-    render json: reviews, status: :ok
+    total = reviews.count
+    reviews = reviews.page(params[:page]).per(params[:per_page])
+
+    render json: {reviews: reviews, total: total}, status: :ok
   end
 
   def create
