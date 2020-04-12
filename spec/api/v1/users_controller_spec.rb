@@ -16,7 +16,6 @@ RSpec.describe Api::V1::UsersController do
 
     it "responds expected user attributes" do
       hash_response = JSON.parse(response.body)
-      p hash_response
       expect(hash_response.keys).to include('email', 'name', 'id')
     end
 
