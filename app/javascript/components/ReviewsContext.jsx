@@ -23,7 +23,7 @@ export function ReviewsContextProvider({children, userId}) {
   },[userId, filters]);
 
   const filterBrand = useCallback((brands = []) => {
-    setFilters({...filters, brands_ids: brands});
+    setFilters({...filters, whiskey_brand_ids: brands});
   }, [filters]);
 
   const filterTaste = useCallback((taste_grade = null) => {
