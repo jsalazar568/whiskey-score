@@ -17,11 +17,11 @@ class Review < ApplicationRecord
   scope :filter_by_grades, ->(grade_hash) { where(grade_hash) }
   scope :filter_by_text, -> (text) { where("to_tsvector(title || ' ' || description) @@ to_tsquery('#{text.gsub(/[[:blank:]]/, '&')}')") }
 
-  def self.create_or_update_by!(args = nil, attributes = nil)
+  def self.create_or_update_by!(args = nil, attributes = {})
     raise StandardError, 'Invalid parameters' if (args[:user_id].blank? || args[:whiskey_id].blank?)
 
     review = Review.find_or_initialize_by({ user_id: args[:user_id], whiskey_id: args[:whiskey_id]})
-    review.update!(attributes) if attributes
+    review.update!(attributes)
     review
   end
 
