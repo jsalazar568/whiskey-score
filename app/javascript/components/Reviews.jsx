@@ -15,8 +15,7 @@ const {Content, Footer} = Layout;
 
 
 export default function Reviews(props) {
-  //OJO borrar:
-  props.location.state = {id: 6, name: "JOHANNA@MAIL.COM"};
+
   if (props.location.state === undefined) {
     return (<Redirect to={{pathname: "/"}}/>);
   }

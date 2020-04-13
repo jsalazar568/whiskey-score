@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { Redirect } from "react-router-dom";
 import AppHeader from "./AppHeader";
 import {Layout, Button, Form, Select, Rate, Input} from 'antd';
 import {client} from "../utils/ApiClient";
@@ -8,17 +9,9 @@ const {Content, Footer} = Layout;
 
 export default function NewReview(props) {
   const [form] = Form.useForm();
-
-  //OJO borrar:
-  props.location.state = {id: 6, name: "JOHANNA@MAIL.COM"};
-  if (props.location.state === undefined) {
-    return (<Redirect to={{pathname: "/"}}/>);
-  }
-
+  const [redirectTo, setRedirect] = useState(null);
   const [brands, setBrands] = useState([]);
   const [whiskeys, setWhiskeys] = useState([]);
-  const {id, name} = props.location.state;
-
 
   useEffect(() => {
     client('/api/v1/whiskey_brands')
@@ -27,6 +20,15 @@ export default function NewReview(props) {
       })
       .catch(error => console.log(error.message));
   }, []);
+
+  if (props.location.state === undefined) {
+    return (<Redirect to={{pathname: "/"}}/>);
+  }
+  const {id, name} = props.location.state;
+
+  if (redirectTo !== null) {
+    return (<Redirect to={{pathname: redirectTo, state: { id: id, name: name }}}/>);
+  }
 
   const getWhiskeys = (whiskey_brand_id) => {
     const url = buildURLQueryString('/api/v1/whiskeys', {user_id: id, whiskey_brand_id});
@@ -41,8 +43,7 @@ export default function NewReview(props) {
   const onFinish = values => {
     client("/api/v1/reviews", { data: {user_id: id, ...values} })
       .then(response => {
-        setUserId(response.id);
-        setUserName(response.name || response.email);
+        setRedirect("/reviews");
       })
       .catch(error => console.log(error.message));
   };

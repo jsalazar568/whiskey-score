@@ -5,7 +5,14 @@ class Api::V1::WhiskeysController < ApplicationController
                else
                  Whiskey.all.order(:label)
                end
-    render json: whiskies
+    render json: whiskies, status: :ok
+  end
+
+  def create
+    whiskey = Whiskey.create!(whiskey_params)
+    render json: whiskey, status: :created
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { error: e.to_s }, status: :bad_request
   end
 
   private

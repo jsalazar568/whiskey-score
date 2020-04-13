@@ -9,7 +9,7 @@ RSpec.describe Api::V1::WhiskeyBrandsController do
     end
 
     it "returns http success" do
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:ok)
     end
 
     it "responds expected whiskey brand attributes" do

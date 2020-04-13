@@ -10,7 +10,7 @@ class Api::V1::ReviewsController < ApplicationController
 
   def create
     review = Review.create_or_update_by!(review_params.extract!(:user_id, :whiskey_id), review_params)
-    render json: review, status: :ok
+    render json: review, status: :created
   rescue StandardError, ActiveRecord::RecordInvalid => e
     render json: { error: e.to_s }, status: :bad_request
   end
