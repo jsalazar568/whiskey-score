@@ -9,8 +9,7 @@ RSpec.describe Whiskey, type: :model do
       Whiskey.create(label: 'Completely different text', whiskey_brand_id: 1)
 
       result = Whiskey.filter_by_label('this label')
-
-      expect(result).to eq [whiskey1, whiskey2]
+      expect(result.ids).to eq [whiskey1.id, whiskey2.id]
     end
   end
 

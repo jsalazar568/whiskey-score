@@ -1,8 +1,10 @@
 class Api::V1::WhiskeysController < ApplicationController
   def index
-    whiskies = Whiskey.filter_by_brand(params[:whiskey_brand_id])
-                      .order(:label)
-                      .all
+    whiskies = if params[:whiskey_brand_id]
+                 Whiskey.filter_by_brand(params[:whiskey_brand_id]).order(:label)
+               else
+                 Whiskey.all.order(:label)
+               end
     render json: whiskies
   end
 
