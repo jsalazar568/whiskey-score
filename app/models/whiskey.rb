@@ -10,8 +10,8 @@ class Whiskey < ApplicationRecord
 
   before_validation :normalize
 
-  scope :filter_by_label, -> (text) { where("to_tsvector(label) @@ to_tsquery('#{text.gsub(/[[:blank:]]/, '&')}')") }
-  scope :filter_by_brand, -> (brands_ids) { where(whiskey_brand_id: brands_ids) }
+  scope :filter_by_label, -> (text) { where("label ILIKE ?", "%#{text.downcase}%") if text.blank? }
+  scope :filter_by_brand, -> (brands_ids) { where(whiskey_brand_id: brands_ids) if brands_ids }
 
   private
 

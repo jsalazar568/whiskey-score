@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'faker'
 
-RSpec.describe Api::V1::UsersController do
+RSpec.describe Api::V1::WhiskeyBrandsController do
   describe "GET #index" do
     before do
       create_list(:whiskey_brand, 3)
@@ -12,7 +12,7 @@ RSpec.describe Api::V1::UsersController do
       expect(response).to have_http_status(:success)
     end
 
-    it "responds expected user attributes" do
+    it "responds expected whiskey brand attributes" do
       hash_response = JSON.parse(response.body)
       expect(hash_response.length).to eq 3
       expect(hash_response[0].keys).to include('name', 'id')
